@@ -4,9 +4,9 @@ import plotly.express as px
 
 st.set_page_config(page_title="HR Attrition Dashboard", layout="wide")
 
-TEAL = "#2d5f6f"
-GOLD = "#d4a941"
-COLOR_MAP = {"No": TEAL, "Yes": GOLD}
+RED = "#ffa4a4"
+BLUE = "#8adaff"
+COLOR_MAP = {"No": RED, "Yes": BLUE}
 
 @st.cache_data
 def load_data():
@@ -62,13 +62,13 @@ with tab1:
         donut_data.columns = ["Department", "Attrition Count"]
         fig = px.pie(donut_data, names="Department", values="Attrition Count",
                      hole=0.6, title="Attrition Count by Department",
-                     color_discrete_sequence=[TEAL, GOLD, "#a1522c"])
+                     color_discrete_sequence=[RED, BLUE, "#d6ffb0"])
         st.plotly_chart(fig, use_container_width=True)
     with col2:
         bar_data = filtered["Department"].value_counts().reset_index()
         bar_data.columns = ["Department", "Total Employees"]
         fig = px.bar(bar_data, x="Total Employees", y="Department", orientation="h",
-                     title="Total Employees by Department", color_discrete_sequence=[TEAL])
+                     title="Total Employees by Department", color_discrete_sequence=[RED])
         st.plotly_chart(fig, use_container_width=True)
 
 # ===== PAGE 2: ATTRITION DRIVERS =====
@@ -84,14 +84,14 @@ with tab2:
         rate_dept = filtered.groupby("Department")["Attrition"].apply(lambda x: (x == "Yes").mean()).reset_index()
         rate_dept.columns = ["Department", "Attrition Rate"]
         fig = px.bar(rate_dept, x="Attrition Rate", y="Department", orientation="h",
-                     title="Attrition Rate by Department", color_discrete_sequence=[TEAL])
+                     title="Attrition Rate by Department", color_discrete_sequence=[RED])
         st.plotly_chart(fig, use_container_width=True)
     with col2:
         rate_ot = filtered.groupby("OverTime")["Attrition"].apply(lambda x: (x == "Yes").mean()).reset_index()
         rate_ot.columns = ["OverTime", "Attrition Rate"]
         fig = px.bar(rate_ot, x="Attrition Rate", y="OverTime", orientation="h",
                      title="Attrition Rate by OverTime", color="OverTime",
-                     color_discrete_map={"Yes": GOLD, "No": TEAL})
+                     color_discrete_map={"Yes": BLUE, "No": RED})
         st.plotly_chart(fig, use_container_width=True)
 
     col3, col4 = st.columns(2)
@@ -99,13 +99,13 @@ with tab2:
         rate_sat = filtered.groupby("JobSatisfaction")["Attrition"].apply(lambda x: (x == "Yes").mean()).reset_index()
         rate_sat.columns = ["JobSatisfaction", "Attrition Rate"]
         fig = px.bar(rate_sat, x="Attrition Rate", y="JobSatisfaction", orientation="h",
-                     title="Attrition Rate by JobSatisfaction", color_discrete_sequence=[TEAL])
+                     title="Attrition Rate by JobSatisfaction", color_discrete_sequence=[RED])
         st.plotly_chart(fig, use_container_width=True)
     with col4:
         rate_tenure = filtered.groupby("TenureBucket", observed=True)["Attrition"].apply(lambda x: (x == "Yes").mean()).reset_index()
         rate_tenure.columns = ["TenureBucket", "Attrition Rate"]
         fig = px.bar(rate_tenure, x="Attrition Rate", y="TenureBucket", orientation="h",
-                     title="Attrition Rate by TenureBucket", color_discrete_sequence=[TEAL])
+                     title="Attrition Rate by TenureBucket", color_discrete_sequence=[RED])
         st.plotly_chart(fig, use_container_width=True)
 
 # ===== PAGE 3: COMPENSATION =====
@@ -125,7 +125,7 @@ with tab3:
     with col2:
         income_role = filtered.groupby("JobRole")["MonthlyIncome"].mean().sort_values().reset_index()
         fig = px.bar(income_role, x="MonthlyIncome", y="JobRole", orientation="h",
-                     title="Avg Monthly Income by JobRole", color_discrete_sequence=[TEAL])
+                     title="Avg Monthly Income by JobRole", color_discrete_sequence=[RED])
         st.plotly_chart(fig, use_container_width=True)
 
         income_attr = filtered.groupby("Attrition")["MonthlyIncome"].mean().reset_index()
